@@ -1,0 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:codeflutter/screens/auth/login_screen.dart';
+import 'package:codeflutter/screens/auth/register_screen.dart';
+import 'package:codeflutter/screens/navigator/bottomtab.dart';
+
+void main() {
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    initialRoute: 'login',
+    routes: {
+      'register': (context) => const RegisterScreen(),
+      'login': (context) => const LoginScreen(),
+      'navigator': (context) => const BottomTab(),
+    },
+  ));
+}
