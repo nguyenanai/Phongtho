@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -8,6 +9,45 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> signIn() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      if (!mounted) return;
+      Navigator.of(context).pop();
+      Navigator.of(context).pushReplacementNamed('navigator');
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+      Navigator.of(context).pop();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message ?? 'Sai email hoặc mật khẩu'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Email',
                     style: TextStyle(
                       fontSize: 16,
@@ -32,9 +72,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: Colors.black54,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   TextField(
-                    style: TextStyle(color: Colors.black),
+                    controller: _emailController,
+                    style: const TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                       fillColor: Colors.grey.shade100,
                       filled: true,
@@ -44,8 +85,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 30),
-                  Text(
+                  const SizedBox(height: 30),
+                  const Text(
                     'Mật khẩu',
                     style: TextStyle(
                       fontSize: 16,
@@ -53,9 +94,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: Colors.black54,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   TextField(
-                    style: TextStyle(),
+                    controller: _passwordController,
+                    style: const TextStyle(),
                     obscureText: true,
                     decoration: InputDecoration(
                       fillColor: Colors.grey.shade100,
@@ -68,25 +110,23 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               Row(
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, 'navigator');
-                      },
+                      onPressed: signIn,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 20,
                           vertical: 15,
                         ),
                       ),
-                      child: Text(
+                      child: const Text(
                         'Đăng nhập',
                         style: TextStyle(
                           fontSize: 27,
@@ -98,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -106,8 +146,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () {
                       Navigator.pushNamed(context, 'register');
                     },
-                    style: ButtonStyle(),
-                    child: Text(
+                    style: const ButtonStyle(),
+                    child: const Text(
                       'Đăng ký',
                       textAlign: TextAlign.left,
                       style: TextStyle(
@@ -119,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   TextButton(
                     onPressed: () {},
-                    child: Text(
+                    child: const Text(
                       'Quên mật khẩu',
                       style: TextStyle(
                         decoration: TextDecoration.underline,

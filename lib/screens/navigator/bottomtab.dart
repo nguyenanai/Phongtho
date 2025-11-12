@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:codeflutter/screens/home/home_screen.dart';
+import 'package:untitled/screens/home/home_screen.dart';
 import '../create_screen.dart';
 import '../library_screen.dart';
+import '../account_screen.dart';
 
 class BottomTab extends StatefulWidget {
   const BottomTab({super.key});
@@ -18,7 +19,7 @@ class _BottomTabState extends State<BottomTab> {
     const LibraryScreen(),
     const CreateScreen(),
     const Text('Cửa hàng'),
-    const Text('Tài khoản'),
+    const AccountScreen(),
   ];
 
   void _onItemTapped(int index) {
